@@ -7,8 +7,9 @@ module.exports = {
     name: "ready",
     runOnce: true,
     run: async (client) => {
-        client.user.setActivity("Hall of Bash", {
-            type: ActivityType.Playing
+        client.user.setPresence({
+            activities: [{ name: `Hall of Bash`, type: ActivityType.Competing }],
+            status: 'dnd',
         });
 
         let allSlashCommands = 0;

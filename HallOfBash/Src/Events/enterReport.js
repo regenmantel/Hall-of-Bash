@@ -16,9 +16,12 @@ module.exports = {
             let linkRegex = /https:\/\/(?<world>\w+\d+).+public_report\/(?<reportID>.+)/g;
 
             let timeRegex = /an.*\s+(?<day>\d+).(?<month>\d+).(?<year>\d+)\s+(?<hour>\d+):(?<minute>\d+):(?<second>\d+)/g;
-            let dataRegex = /Angreiferglück\s+(?<glueck>[^%]*)%\s+Moral\:\s+(?<moral>\d+)%\s+\S+\s+(?<attackerName>\w+)\s+Herkunft\:\s+(?<attackerVillageName>[^(]*)\s\((?<attackerXCoord>\d+)\D(?<attackerYCoord>\d+)\)\sK(?<attackerContinent>\d+)/g; 
+            let luckData = /Angreiferglück\s+(?<glueck>[^%]*)%/g;
+            let moralData = /Moral\:\s+(?<moral>\d+)/g
+            let attData = /Angreifer:\s+(?<attackerName>\w+)\s+Herkunft\:\s+(?<attackerVillageName>[^(]*)\s\((?<attackerXCoord>\d+)\D(?<attackerYCoord>\d+)\)\sK(?<attackerContinent>\d+)/g;
+            //let dataRegex = /Angreiferglück\s+(?<glueck>[^%]*)%\s+Moral\:\s+(?<moral>\d+)%\s+\S+\s+(?<attackerName>\w+)\s+Herkunft\:\s+(?<attackerVillageName>[^(]*)\s\((?<attackerXCoord>\d+)\D(?<attackerYCoord>\d+)\)\sK(?<attackerContinent>\d+)/g;
             let regexVerteidiger = /Verteidiger\:\s+(?<defenderName>.*)\s+Ziel\:\s+(?<defenderVillageName>[^(]*)\((?<defenderXCoord>\d+)\D(?<defenderYCoord>\d+)\)\sK(?<defenderContinent>\d+)\s+Anzahl\:\s+(?<anzahlSpeerVerteidiger>\d+)\s+(?<anzahlSchwertVerteidiger>\d+)\s+(?<anzahlAxtVerteidiger>\d+)\s+(?<anzahlBogenVerteidiger>\d+)\s+(?<anzahlSpyVerteidiger>\d+)\s+(?<anzahlLeichteVerteidiger>\d+)\s+(?<anzahlBeritteneVerteidiger>\d+)\s+(?<anzahlSchwereVerteidiger>\d+)\s+(?<anzahlRammbockVerteidiger>\d+)\s+(?<anzahlKatapultVerteidiger>\d+)\s+(?<anzahlPaladinVerteidiger>\d+)\s+(?<anzahlAGVerteidiger>\d+)\s+(?<anzahlMilizVerteidiger>\d+)\s+Verluste\:\s+(?<verlusteSpeerVerteidiger>\d+)\s+(?<verlusteSchwertVerteidiger>\d+)\s+(?<verlusteAxtVerteidiger>\d+)\s+(?<verlusteBogenVerteidiger>\d+)\s+(?<verlusteSpyVerteidiger>\d+)\s+(?<verlusteLeichteVerteidiger>\d+)\s+(?<verlusteBeritteneVerteidiger>\d+)\s+(?<verlusteSchwereVerteidiger>\d+)\s+(?<verlusteRammbockVerteidiger>\d+)\s+(?<verlusteKatapultVerteidiger>\d+)\s+(?<verlustePalaVerteidiger>\d+)\s+(?<verlusteAGVerteidiger>\d+)\s+(?<verlusteMilizVerteidiger>\d+)\s+/g;
-
+            console.log(link);
             if(link.match(linkRegex)) {
                 let match, world, reportID;
                 while (match = linkRegex.exec(link)) {
@@ -46,10 +49,17 @@ module.exports = {
                         second = matchTime.groups.second;
                     }
 
-                    let luck, moral, matchAttacker, attackerName, attackerVillageName, attackerXCoords, attackerYCoords, attackerContinent;   
-                    while ((matchAttacker = dataRegex.exec(input)) !== null) {
-                        luck = matchAttacker.groups.glueck;
-                        moral = matchAttacker.groups.moral;
+                    let luck = 0;
+                    while ((matchLuck = luckData.exec(input)) !== null) {
+                        luck = matchLuck.groups.glueck ? matchLuck.groups.glueck : 0;
+                    }
+                    let moral = 0;
+                    while ((matchMoral = moralData.exec(input)) !== null) {
+                        moral = matchMoral.groups.moral ? matchMoral.groups.moral : 0;
+                    }
+                    let matchAttacker, attackerName, attackerVillageName, attackerXCoords, attackerYCoords, attackerContinent;
+
+                    while ((matchAttacker = attData.exec(input)) !== null) {
                         attackerName = matchAttacker.groups.attackerName;
                         attackerVillageName = matchAttacker.groups.attackerVillageName;
                         attackerXCoords = matchAttacker.groups.attackerXCoord;
@@ -101,7 +111,15 @@ module.exports = {
     
                         //console.log(`Mit diesem Angriff hast du ${bashpoints} Bash-Punkte gemacht.`);
                     }
-
+                    console.log(attackerName);
+                    console.log(bashpoints);
+                    console.log(luck);
+                    console.log(moral);
+                    console.log(attackerXCoords);
+                    console.log(attackerYCoords);
+                    console.log(defenderXCoords);
+                    console.log(defenderYCoords);
+                    console.log(timestamp);
                     if(!(attackerName === undefined || bashpoints === undefined)) {
                         const browser = await puppeteer.launch({
                             args: ["--no-sandbox", "--disabled-setupid-sandbox"],

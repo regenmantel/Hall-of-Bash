@@ -35,15 +35,19 @@ client.on("ready", async () => {
 
     let top = await conn('SELECT bashPoints, igAccountName FROM `hallofbash` ORDER by bashPoints DESC LIMIT 3;');
     
-    for(let i=0; i<top.length; i++) {
-        if(!top[i].bashPoints > 0) {
+    for (let i = 0; i < top.length; i++) {
+        if (top[i].bashPoints <= 0) {
             top[i].igAccountName = ' ';
         }
     }
-
-    let url = `https://diestaemmedb.de/testOsse/test.php?rang1=${top[0].igAccountName}&rang2=${top[1].igAccountName}&rang3=${top[2].igAccountName}&bash1=${top[0].bashPoints}&bash2=${top[1].bashPoints}&bash3=${top[2].bashPoints}`;
-    console.log(url);
-
+    
+    let url = 'https://diestaemmedb.de/testOsse/test.php?';
+    
+    for (let i = 0; i < Math.min(top.length, 3); i++) {
+        url += `rang${i + 1}=${top[i].igAccountName}&bash${i + 1}=${top[i].bashPoints}&`;
+    }
+    
+    url = url.slice(0, -1);
     let img;
     axios.get(url)
         .then(async response => {
@@ -53,11 +57,12 @@ client.on("ready", async () => {
             console.error('Error while making the request:', error);
         });
     await delay(300);
-
+    
     await hallOfBashChannel.send(img);
 
     await delay(30000); 
     process.exit();
+
 });
 
 function delay(time) {

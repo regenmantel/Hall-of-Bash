@@ -21,6 +21,53 @@
         partials: [Partials.Channel]
     });
 
+    
+    let winston = require('winston');
+    let logger = new (winston.createLogger)({
+        transports: [
+            new (winston.transports.Console)(),
+            new (winston.transports.File)({
+                filename: 'HallOfBashError.log',
+                timestamp: true, /*maxsize: 5242880, maxFiles: 100*/
+            })
+        ]
+    });
+
+    botClient
+        .on("error", (error) => {
+            let dateForException = new Date();
+            let dateStr =
+                ("00" + (dateForException.getMonth() + 1)).slice(-2) + "/" +
+                ("00" + dateForException.getDate()).slice(-2) + "/" +
+                dateForException.getFullYear() + " " +
+                ("00" + dateForException.getHours()).slice(-2) + ":" +
+                ("00" + dateForException.getMinutes()).slice(-2) + ":" +
+                ("00" + dateForException.getSeconds()).slice(-2);
+            logger.error('errorDiscord ' + dateStr + ' :', {message: error.message, stack: error.stack});
+        })
+        .on("debug", (error) => {
+            let dateForException = new Date();
+            let dateStr =
+                ("00" + (dateForException.getMonth() + 1)).slice(-2) + "/" +
+                ("00" + dateForException.getDate()).slice(-2) + "/" +
+                dateForException.getFullYear() + " " +
+                ("00" + dateForException.getHours()).slice(-2) + ":" +
+                ("00" + dateForException.getMinutes()).slice(-2) + ":" +
+                ("00" + dateForException.getSeconds()).slice(-2);
+            logger.error('debugDiscord ' + dateStr + ' :', {message: error});
+        })
+        .on("warn", (error) => {
+            let dateForException = new Date();
+            let dateStr =
+                ("00" + (dateForException.getMonth() + 1)).slice(-2) + "/" +
+                ("00" + dateForException.getDate()).slice(-2) + "/" +
+                dateForException.getFullYear() + " " +
+                ("00" + dateForException.getHours()).slice(-2) + ":" +
+                ("00" + dateForException.getMinutes()).slice(-2) + ":" +
+                ("00" + dateForException.getSeconds()).slice(-2);
+            logger.error('warnDiscord ' + dateStr + ' :', {message: error});
+        });
+
     exports.rootPath = dirPath;
     exports.client = botClient;
 

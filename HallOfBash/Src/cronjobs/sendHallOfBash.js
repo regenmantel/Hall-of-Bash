@@ -31,6 +31,7 @@ const client = new Client({
 client.login(config.client.botToken);
 
 client.on("ready", async () => {
+    console.log('sendHallOfBash cronjob');
     const hallOfBashChannel = client.channels.cache.find(channel => channel.id === config.server.channels.hobChannel);
 
     let top = await conn('SELECT bashPoints, igAccountName FROM `hallofbash` ORDER by bashPoints DESC LIMIT 3;');

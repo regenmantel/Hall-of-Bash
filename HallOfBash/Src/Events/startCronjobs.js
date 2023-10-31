@@ -23,7 +23,7 @@ module.exports = {
 			const now = new Date();
 			const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-			if (now.getDate() === lastDayOfMonth.getDate() && now.getHours() === 23 && now.getMinutes() === 50) {
+			if (now.getDate() === lastDayOfMonth.getDate() && now.getHours() === 23 && now.getMinutes() === 50 && now.getSeconds() === 0) {
 				await endMonth(client);
 			}
 		}

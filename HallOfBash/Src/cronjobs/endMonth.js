@@ -4,26 +4,7 @@ const axios = require('axios');
 const config = require('../Credentials/Config');
 const { conn } = require('../functions/conn');
 
-const client = new Client({
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.GuildPresences,
-		GatewayIntentBits.DirectMessages,
-		GatewayIntentBits.MessageContent, // Only for bots with message content intent access.
-		GatewayIntentBits.DirectMessageReactions,
-		GatewayIntentBits.GuildMembers,
-		GatewayIntentBits.GuildMessageReactions,
-		GatewayIntentBits.GuildWebhooks,
-		GatewayIntentBits.GuildVoiceStates,
-		GatewayIntentBits.GuildInvites,
-	],
-	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
-});
-
-client.login(config.client.botToken);
-
-client.on('ready', async () => {
+const sendHallOfBash = async function sendHallOfBash(client) {
 	const user = client.users.cache.find((user) => user.id === '401882349970915331');
 
 	let top = await conn('SELECT bashPoints, igAccountName FROM `hallofbash` ORDER by bashPoints DESC LIMIT 3;');
@@ -54,10 +35,11 @@ client.on('ready', async () => {
 
 	await user.send(img);
 
-	await delay(30000);
-	process.exit();
-});
+	await conn('UPDATE `hallofbash` SET bashpoints = 0');
 
-function delay(time) {
-	return new Promise((resolve) => setTimeout(resolve, time));
-}
+	return new Promise((resolve) => {
+		resolve();
+	});
+};
+
+exports.sendHallOfBash = sendHallOfBash;

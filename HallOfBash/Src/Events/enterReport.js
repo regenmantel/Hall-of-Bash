@@ -15,7 +15,7 @@ module.exports = {
             let link = message.content;
             let linkRegex = /https:\/\/(?<world>\w+\d+).+public_report\/(?<reportID>.+)/g;
 
-            let timeRegex = /an.*\s+(?<day>\d+).(?<month>\d+).(?<year>\d+)\s+(?<hour>\d+):(?<minute>\d+):(?<second>\d+)/g;
+            let timeRegex = /K.*\s+(?<day>\d+).(?<month>\d+).(?<year>\d+)\s+(?<hour>\d+):(?<minute>\d+):(?<second>\d+)/g;
             let luckData = /Angreiferglück\s+(?<glueck>[^%]*)%/g;
             let moralData = /Moral\:\s+(?<moral>\d+)/g
             let attData = /Angreifer:\s+(?<attackerName>\w+)\s+Herkunft\:\s+(?<attackerVillageName>[^(]*)\s\((?<attackerXCoord>\d+)\D(?<attackerYCoord>\d+)\)\sK(?<attackerContinent>\d+)/g;
@@ -41,12 +41,12 @@ module.exports = {
 
                     let day, month, year, hour, minute, second;
                     while ((matchTime = timeRegex.exec(input)) !== null) {
-                        day = matchTime.groups.day;
-                        month = matchTime.groups.month;
-                        year = matchTime.groups.year;
-                        hour = matchTime.groups.hour;
-                        minute = matchTime.groups.minute;
-                        second = matchTime.groups.second;
+                        day = matchTime.groups.day ? matchTime.groups.day: 0;
+                        month = matchTime.groups.month ? matchTime.groups.month: 0;
+                        year = matchTime.groups.year ? matchTime.groups.year: 0;
+                        hour = matchTime.groups.hour ? matchTime.groups.hour: 0;
+                        minute = matchTime.groups.minute ? matchTime.groups.minute: 0;
+                        second = matchTime.groups.second ? matchTime.groups.second: 0;
                     }
 
                     let luck = 0;
@@ -60,22 +60,22 @@ module.exports = {
                     let matchAttacker, attackerName, attackerVillageName, attackerXCoords, attackerYCoords, attackerContinent;
 
                     while ((matchAttacker = attData.exec(input)) !== null) {
-                        attackerName = matchAttacker.groups.attackerName;
-                        attackerVillageName = matchAttacker.groups.attackerVillageName;
-                        attackerXCoords = matchAttacker.groups.attackerXCoord;
-                        attackerYCoords = matchAttacker.groups.attackerYCoord;
-                        attackerContinent = matchAttacker.groups.attackerContinent;
+                        attackerName = matchAttacker.groups.attackerName ? matchAttacker.groups.attackerName: 'Angreifername';
+                        attackerVillageName = matchAttacker.groups.attackerVillageName ? matchAttacker.groups.attackerVillageName: 'Dorfname';
+                        attackerXCoords = matchAttacker.groups.attackerXCoord ? matchAttacker.groups.attackerXCoord: 0;
+                        attackerYCoords = matchAttacker.groups.attackerYCoord ? matchAttacker.groups.attackerYCoord: 0;
+                        attackerContinent = matchAttacker.groups.attackerContinent ?  matchAttacker.groups.attackerContinent: 0;
                     }
                     
                     let timestamp = new Date(`20${year}-${month}-${day}T${hour}:${minute}:${second}`).getTime() / 1000;
                     
                     let matchVerteidiger, bashpoints, defenderName, defenderVillageName, defenderXCoords, defenderYCoords, defenderContinent;
                     while ((matchVerteidiger = regexVerteidiger.exec(input)) !== null) {
-                        defenderName = matchVerteidiger.groups.defenderName;
-                        defenderVillageName = matchVerteidiger.groups.defenderVillageName;
-                        defenderXCoords = matchVerteidiger.groups.defenderXCoord;
-                        defenderYCoords = matchVerteidiger.groups.defenderYCoord;
-                        defenderContinent = matchVerteidiger.groups.defenderContinent;
+                        defenderName = matchVerteidiger.groups.defenderName ? matchVerteidiger.groups.defenderName: 'Verteidigername';
+                        defenderVillageName = matchVerteidiger.groups.defenderVillageName ? matchVerteidiger.groups.defenderVillageName: 'Dorfname';
+                        defenderXCoords = matchVerteidiger.groups.defenderXCoord ? matchVerteidiger.groups.defenderXCoord: 0;
+                        defenderYCoords = matchVerteidiger.groups.defenderYCoord ? matchVerteidiger.groups.defenderYCoord: 0;
+                        defenderContinent = matchVerteidiger.groups.defenderContinent ? matchVerteidiger.groups.defenderContinent: 0;
                         let verlustSpeerVerteidiger = matchVerteidiger.groups.verlusteSpeerVerteidiger ? matchVerteidiger.groups.verlusteSpeerVerteidiger: 0;
                         let verlustSchwertVerteidiger = matchVerteidiger.groups.verlusteSchwertVerteidiger ? matchVerteidiger.groups.verlusteSchwertVerteidiger: 0;
                         let verlustAxtVerteidiger = matchVerteidiger.groups.verlusteAxtVerteidiger ? matchVerteidiger.groups.verlusteAxtVerteidiger: 0;
@@ -111,6 +111,7 @@ module.exports = {
     
                         //console.log(`Mit diesem Angriff hast du ${bashpoints} Bash-Punkte gemacht.`);
                     }
+
                     console.log(attackerName);
                     console.log(bashpoints);
                     console.log(luck);
@@ -120,6 +121,7 @@ module.exports = {
                     console.log(defenderXCoords);
                     console.log(defenderYCoords);
                     console.log(timestamp);
+
                     if(!(attackerName === undefined || bashpoints === undefined)) {
                         const browser = await puppeteer.launch({
                             args: ["--no-sandbox", "--disabled-setupid-sandbox"],

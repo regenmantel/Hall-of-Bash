@@ -4,7 +4,7 @@ const axios = require('axios');
 const config = require('../Credentials/Config');
 const { conn } = require('../functions/conn');
 
-const sendHallOfBash = async function sendHallOfBash(client) {
+const endMonth = async function endMonth(client) {
 	const user = client.users.cache.find((user) => user.id === '401882349970915331');
 
 	let top = await conn('SELECT bashPoints, igAccountName FROM `hallofbash` ORDER by bashPoints DESC LIMIT 3;');
@@ -42,4 +42,4 @@ const sendHallOfBash = async function sendHallOfBash(client) {
 	});
 };
 
-exports.sendHallOfBash = sendHallOfBash;
+exports.endMonth = endMonth;

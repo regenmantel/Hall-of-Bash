@@ -1,4 +1,3 @@
-const { inlineCode, Client, GatewayIntentBits, Partials, ChannelType, PermissionsBitField } = require('discord.js');
 const axios = require('axios');
 
 const config = require('../Credentials/Config');
@@ -39,5 +38,9 @@ const sendHallOfBash = async function sendHallOfBash(client) {
 		resolve();
 	});
 };
+
+function delay(time) {
+	return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 exports.sendHallOfBash = sendHallOfBash;

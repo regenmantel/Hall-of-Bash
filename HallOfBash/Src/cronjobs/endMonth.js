@@ -42,4 +42,8 @@ const endMonth = async function endMonth(client) {
 	});
 };
 
+function delay(time) {
+	return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 exports.endMonth = endMonth;

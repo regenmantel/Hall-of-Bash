@@ -6,6 +6,12 @@ const { conn } = require('../functions/conn');
 const sendHallOfBash = async function sendHallOfBash(client) {
 	const hallOfBashChannel = client.channels.cache.find((channel) => channel.id === config.server.channels.hobChannel);
 
+	await hallOfBashChannel.messages.fetch({ limit: 1 }).then((messages) => {
+		messages.forEach((message) => message.delete());
+	});
+
+	await delay(500);
+
 	let top = await conn('SELECT bashPoints, igAccountName FROM `hallofbash` ORDER by bashPoints DESC LIMIT 3;');
 
 	for (let i = 0; i < top.length; i++) {

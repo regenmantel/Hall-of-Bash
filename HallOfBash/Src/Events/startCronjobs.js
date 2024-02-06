@@ -14,7 +14,7 @@ module.exports = {
 			let minute = new Date().getMinutes();
 			let seconds = new Date().getSeconds();
 
-			if (hour == '20' && minute == '00' && seconds == '00') {
+			if (hour == '20' && minute == '02' && seconds == '00') {
 				await sendHallOfBash(client);
 			}
 		}

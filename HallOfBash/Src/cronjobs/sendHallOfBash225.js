@@ -2,10 +2,10 @@ const axios = require('axios');
 const config = require('../Credentials/Config');
 const { conn } = require('../functions/conn');
 
-const sendHallOfBash = async function sendHallOfBash(client) {
-	let hallOfBashChannel = client.channels.cache.find((channel) => channel.id === config.server.channels.hobChannel);
-	//let user = client.users.cache.find((user) => user.id === '401882349970915331');
-	let tableName = 'de221';
+const sendHallOfBash225 = async function sendHallOfBash(client) {
+	let hallOfBashChannel = client.channels.cache.find((channel) => channel.id === config.server2.channels.hobChannel);
+	let user = client.users.cache.find((user) => user.id === '401882349970915331');
+	let tableName = 'de225';
 
 	let top = await conn(`SELECT bashPoints, igAccountName FROM \`${tableName}\` ORDER by bashPoints DESC LIMIT 3;`);
 
@@ -43,5 +43,4 @@ const sendHallOfBash = async function sendHallOfBash(client) {
 function delay(time) {
 	return new Promise((resolve) => setTimeout(resolve, time));
 }
-
-exports.sendHallOfBash = sendHallOfBash;
+exports.sendHallOfBash225 = sendHallOfBash225;

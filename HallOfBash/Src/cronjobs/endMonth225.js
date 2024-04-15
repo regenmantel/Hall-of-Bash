@@ -4,12 +4,12 @@ const axios = require('axios');
 const config = require('../Credentials/Config');
 const { conn } = require('../functions/conn');
 
-const endMonth = async function endMonth(client) {
+const endMonth225 = async function endMonth225(client) {
 	const rankEmoji = [':first_place:', ':second_place:', ':third_place:'];
 
-	const hallOfBashChannel = client.channels.cache.find((channel) => channel.id === config.server.channels.hobChannel);
+	const hallOfBashChannel = client.channels.cache.find((channel) => channel.id === config.server2.channels.hobChannel);
 	const user = client.users.cache.find((user) => user.id === '401882349970915331');
-	let tableName = 'de221';
+	let tableName = 'de225';
 
 	let top = await conn(`SELECT bashPoints, igAccountName FROM \`${tableName}\` ORDER by bashPoints DESC LIMIT 3;`);
 
@@ -63,4 +63,4 @@ function delay(time) {
 	return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-exports.endMonth = endMonth;
+exports.endMonth225 = endMonth225;

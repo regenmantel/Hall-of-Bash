@@ -1,5 +1,7 @@
 const { sendHallOfBash } = require('../cronjobs/sendHallOfBash');
+const { sendHallOfBash225 } = require('../cronjobs/sendHallOfBash225');
 const { endMonth } = require('../cronjobs/endMonth');
+const { endMonth225 } = require('../cronjobs/endMonth225');
 module.exports = {
 	name: 'ready',
 	runOnce: true,
@@ -17,6 +19,10 @@ module.exports = {
 			if (hour == '20' && minute == '02' && seconds == '00') {
 				await sendHallOfBash(client);
 			}
+
+			if (hour == '20' && minute == '02' && seconds == '30') {
+				await sendHallOfBash225(client);
+			}
 		}
 
 		async function checkLastDayOfMonth(client) {
@@ -29,6 +35,10 @@ module.exports = {
 
 			if (now.getDate() === lastDayOfMonth.getDate() && hour === 23 && minute === 50 && seconds === 0) {
 				await endMonth(client);
+			}
+
+			if (now.getDate() === lastDayOfMonth.getDate() && hour === 23 && minute === 50 && seconds === 30) {
+				await endMonth225(client);
 			}
 		}
 	},

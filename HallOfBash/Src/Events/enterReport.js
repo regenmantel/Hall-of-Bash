@@ -24,7 +24,7 @@ module.exports = {
 				'UndercoverFlipper',
 				'FlowerPower*',
 				'Agent100',
-				'Tinki',
+				'Tinki1',
 				'Nezuko',
 				'Son Goku',
 				'matz66',
@@ -61,7 +61,18 @@ module.exports = {
 				'SKAV Maracuja',
 				'Fieser Fiesling',
 				'Weißwurst Chris',
+				'Pandoralight',
 				'BlAcKrOxX999',
+				'puma 97',
+				'kaioshin',
+				'Morgar',
+				'dodo1901',
+				'Buffetminister',
+				'Fapuuuu',
+				'amrita',
+				'Rexxter',
+				'Honos',
+				'xploe',
 			];
 		} else if (message.guild.id === config.server2.serverId) {
 			tableName = 'de225';

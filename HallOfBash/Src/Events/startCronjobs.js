@@ -2,6 +2,7 @@ const { sendHallOfBash } = require('../cronjobs/sendHallOfBash');
 const { sendHallOfBash225 } = require('../cronjobs/sendHallOfBash225');
 const { endMonth } = require('../cronjobs/endMonth');
 const { endMonth225 } = require('../cronjobs/endMonth225');
+const { checkWorlds } = require('../cronjobs/worldInfo');
 module.exports = {
 	name: 'ready',
 	runOnce: true,
@@ -9,6 +10,7 @@ module.exports = {
 		setInterval(() => {
 			checkTime(client);
 			checkLastDayOfMonth(client);
+			checkWorld(client);
 		}, 1000);
 
 		async function checkTime(client) {
@@ -22,6 +24,16 @@ module.exports = {
 
 			if (hour == '20' && minute == '02' && seconds == '30') {
 				await sendHallOfBash225(client);
+			}
+		}
+
+		async function checkWorld(client) {
+			let hour = new Date().getHours();
+			let minute = new Date().getMinutes();
+			let seconds = new Date().getSeconds();
+
+			if (minute == '03' && seconds == '30') {
+				await checkWorlds(client);
 			}
 		}
 

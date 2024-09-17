@@ -1,8 +1,8 @@
 (async () => {
     const { Client, GatewayIntentBits, Partials, Collection } = require("discord.js");
-    const credentialManager = require("./HallOfBash/Src/Credentials/Config");
-    const dirPath = __dirname + '/HallOfBash';
-    const { messageCommandsManager, eventsManager, buttonManager, selectMenuManager, modalFormsManager, slashCommandsManager } = require("./HallOfBash/Src/Structures/Managers/Export");
+    const credentialManager = require("./Src/Credentials/Config");
+    const dirPath = __dirname + '/';
+    const { messageCommandsManager, eventsManager, buttonManager, selectMenuManager, modalFormsManager, slashCommandsManager } = require("./Src/Structures/Managers/Export");
 
     const botClient = new Client({
         intents: [

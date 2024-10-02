@@ -1,10 +1,12 @@
+const { inlineCode, AttachmentBuilder } = require("discord.js");
 const puppeteer = require("puppeteer");
 const request = require("request");
+const fs = require("fs");
+const path = require("path");
 
 const config = require("../Credentials/Config");
 const { conn } = require("../functions/conn");
-
-const { inlineCode, AttachmentBuilder } = require("discord.js");
+const members = "./skrMember.txt";
 
 module.exports = {
 	name: "messageCreate",
@@ -12,107 +14,13 @@ module.exports = {
 		let tableName, channel;
 		let skrMember = [];
 		if (message.guild.id === config.server.serverId) {
-			tableName = "de221";
+			tableName = "de233";
 			channel = await client.channels.cache.get(config.server.channels.reportChannel);
 
-			skrMember = [
-				"Gol D. Roger",
-				"xZaiZunx",
-				"Phonix11",
-				"The System is a Joke v2",
-				"IchKlaueSATAnlagen",
-				"UndercoverFlipper",
-				"FlowerPower*",
-				"Agent100",
-				"Tinki1",
-				"Nezuko",
-				"Son Goku",
-				"matz66",
-				"Schleiferano",
-				"steinschlag",
-				"WirDeffenDichWegAG",
-				"-=Sethos=-",
-				"STAVKA",
-				"MaLuS1337",
-				"Kataquak",
-				"HarryOtter",
-				"GAL1LEO",
-				"Sourex",
-				"HausaufgabenGemacht?",
-				"ahjoo",
-				"Ichabessen",
-				"FaaMaZe RONSTA",
-				"Element",
-				"klaaaaa",
-				"Unfähig und Faul",
-				"catonbook",
-				"RamBam",
-				"Anbauerregelt",
-				"Schlumpfinchen",
-				"DjangoLegend",
-				"the real torbas",
-				"Khaxzl",
-				"rUl0rd",
-				"Nils2002",
-				"aiwa5",
-				"Nachttürmer",
-				"Dr. Gint0nic",
-				"OttervonBismarck",
-				"SKAV Maracuja",
-				"Fieser Fiesling",
-				"Weißwurst Chris",
-				"Pandoralight",
-				"BlAcKrOxX999",
-				"puma 97",
-				"kaioshin",
-				"Morgar",
-				"dodo1901",
-				"Buffetminister",
-				"Fapuuuu",
-				"amrita",
-				"Rexxter",
-				"Honos",
-				"xploe",
-			];
-		} else if (message.guild.id === config.server2.serverId) {
-			tableName = "de225";
-			channel = await client.channels.cache.get(config.server2.channels.reportChannel);
-
-			skrMember = [
-				"cocodecoc",
-				"kaioshin",
-				"dodo1901",
-				"TheGreatButcher",
-				"FortnHuntr",
-				"Gol D. Roger",
-				"IchKlaueSATAnlagen",
-				"FlowerPower*",
-				"marcel1912",
-				"SickL3gacy",
-				"matz66",
-				"Nezuko",
-				"Melampous",
-				"The System is a Joke v2",
-				"MaLuS1337",
-				"SurPr1z3",
-				"DörferRecyclingGmbH",
-				"WirDeffenDichWegAG",
-				"schlartzi",
-				"error.",
-				"DjangoLegend",
-				"UndercoverFlipper",
-				"FaaMaZe RONSTA",
-				"Oanza",
-				"Hamburgbaaanq",
-				"Yirooy",
-				"Nils2002",
-				"xZaiZunx",
-				"Unfähig und Faul",
-				"Rexxter",
-			];
-		} else {
-			await interaction.reply({ content: "Ungültiger Server", ephemeral: true });
-			return;
+			skrMember = fs
+				.readFileSync(members, "utf-8")
+				.split("\n")
+				.map((name) => name.trim());
 		}
 
 		if (
@@ -395,6 +303,7 @@ module.exports = {
 					while ((match = palaRegex.exec(input)) !== null) {
 						palaXP = match[1] ? match[1] : 0;
 					}
+
 					/*
 					const browser = await puppeteer.launch({
 						args: ['--no-sandbox', '--disabled-setupid-sandbox'],
@@ -424,9 +333,12 @@ module.exports = {
 
 					try {
 						const browser = await puppeteer.launch({
-							headless: "new",
-							args: ["--no-sandbox", "--disable-setuid-sandbox"],
-							executablePath: "/usr/bin/google-chrome-stable",
+							args: [
+								"--no-sandbox",
+								"--disable-setuid-sandbox",
+								"--disable-dev-shm-usage",
+							],
+							headless: true,
 						});
 						const page = await browser.newPage();
 
@@ -440,25 +352,29 @@ module.exports = {
 							return;
 						}
 
-						if (elementHandles.length <= 4) {
-							console.error("Das Element mit Index 4 konnte nicht gefunden werden.");
-							await browser.close();
-							return;
-						}
+						if (elementHandles.length > 4) {
+							const boundingBox = await elementHandles[4].boundingBox();
+							if (boundingBox) {
+								const screenshotPath = path.join(__dirname, "screenshot.png");
+								await page.screenshot({
+									path: screenshotPath,
+									clip: boundingBox,
+								});
 
-						const boundingBox = await elementHandles[4].boundingBox();
-						if (boundingBox) {
-							const screenshotBuffer = await page.screenshot({ clip: boundingBox });
-							const attachment = new AttachmentBuilder(screenshotBuffer, {
-								name: "screenshot.png",
-							});
+								const { AttachmentBuilder } = require("discord.js");
+								const attachment = new AttachmentBuilder(screenshotPath);
+								await channel.send({ files: [attachment] });
 
-							await channel.send({ files: [attachment] });
+								fs.unlinkSync(screenshotPath);
+								await browser.close();
+							} else {
+								console.error("Bounding box could not be determined.");
+								await browser.close();
+							}
 						} else {
-							console.error("Bounding box konnte nicht ermittelt werden.");
+							console.error("The desired element does not exist.");
+							await browser.close();
 						}
-
-						await browser.close();
 					} catch (error) {
 						console.error("Ein Fehler ist aufgetreten:", error);
 					}

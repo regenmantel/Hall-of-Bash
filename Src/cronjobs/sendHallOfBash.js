@@ -1,12 +1,15 @@
-const { conn } = require('../functions/conn');
-const axios = require('axios');
-const config = require('../Credentials/Config');
+const { conn } = require("../functions/conn");
+const config = require("../Credentials/Config");
+
+const axios = require("axios");
 
 const sendHallOfBash = async function sendHallOfBash(client) {
 	console.log("test");
-	let hallOfBashChannel = client.channels.cache.find((channel) => channel.id === config.server.channels.hobChannel);
+	let hallOfBashChannel = client.channels.cache.find(
+		(channel) => channel.id === config.server.channels.hobChannel
+	);
 	//let user = client.users.cache.find((user) => user.id === '401882349970915331');
-	let tableName = 'de221';
+	let tableName = "de233";
 
 	//let top = await conn(`SELECT bashPoints, igAccountName FROM \`${tableName}\` ORDER by bashPoints DESC LIMIT 3;`);
 
@@ -45,7 +48,7 @@ const sendHallOfBash = async function sendHallOfBash(client) {
 	top = top.slice(0, 3);
 	for (let i = 0; i < top.length; i++) {
 		if (top[i].bashPoints <= 0) {
-			top[i].igAccountName = ' ';
+			top[i].igAccountName = " ";
 		}
 	}
 
@@ -58,10 +61,10 @@ const sendHallOfBash = async function sendHallOfBash(client) {
 	url = url.slice(0, -1);
 	let img;
 	try {
-		const response = await axios.get(url);
+		await axios.get(url);
 		img = `https://rrregenmantel.de/hallofbash/${tableName}/bashpoints.jpeg?timeunix=${Date.now()}`;
 	} catch (error) {
-		console.error('Error while making the request:', error);
+		console.error("Error while making the request:", error);
 	}
 
 	try {
@@ -70,7 +73,7 @@ const sendHallOfBash = async function sendHallOfBash(client) {
 		await delay(500);
 		await hallOfBashChannel.send(img);
 	} catch (error) {
-		console.error('Error while sending message:', error);
+		console.error("Error while sending message:", error);
 	}
 };
 

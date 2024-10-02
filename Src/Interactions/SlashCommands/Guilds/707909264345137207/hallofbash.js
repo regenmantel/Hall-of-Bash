@@ -1,13 +1,13 @@
-const { conn } = require('../../../../functions/conn');
-const axios = require('axios');
-const config = require('../../../../Credentials/Config');
-	
+const { conn } = require("../../../../functions/conn");
+const config = require("../../../../Credentials/Config");
+const axios = require("axios");
+
 module.exports = {
-	name: 'hallofbash',
-	description: 'Hall of Bash Top 3',
-	onlyRoles: [config.server.roles.sf, config.server.roles.mod, config.server2.roles.sf],
+	name: "hallofbash",
+	description: "Hall of Bash Top 3",
+	onlyRoles: [config.server.roles.sf, config.server.roles.mod],
 	run: async (client, interaction) => {
-		let tableName = 'de221';
+		let tableName = "de233";
 
 		//let top = await conn(`SELECT bashPoints, igAccountName FROM \`${tableName}\` ORDER BY bashPoints DESC LIMIT 3;`);
 
@@ -46,7 +46,7 @@ module.exports = {
 		top = top.slice(0, 3);
 		for (let i = 0; i < top.length; i++) {
 			if (top[i].bashPoints <= 0) {
-				top[i].igAccountName = ' ';
+				top[i].igAccountName = " ";
 			}
 		}
 
@@ -58,10 +58,10 @@ module.exports = {
 		url = url.slice(0, -1);
 		let img;
 		try {
-			const response = await axios.get(url);
+			await axios.get(url);
 			img = `https://rrregenmantel.de/hallofbash/${tableName}/bashpoints.jpeg?timeunix=${Date.now()}`;
 		} catch (error) {
-			console.error('Error while making the request:', error);
+			console.error("Error while making the request:", error);
 		}
 
 		await delay(300);

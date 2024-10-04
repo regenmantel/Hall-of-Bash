@@ -4,7 +4,6 @@ const config = require("../Credentials/Config");
 const axios = require("axios");
 
 const sendHallOfBash = async function sendHallOfBash(client) {
-	console.log("test");
 	let hallOfBashChannel = client.channels.cache.find(
 		(channel) => channel.id === config.server.channels.hobChannel
 	);

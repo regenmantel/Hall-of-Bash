@@ -27,7 +27,7 @@ module.exports = {
 			const time = new TextInputBuilder()
 				.setCustomId("time")
 				.setLabel("Zeitraum")
-				.setPlaceholder("z.B: 12-15")
+				.setPlaceholder("z.B: 07-21 (Uhr)")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
